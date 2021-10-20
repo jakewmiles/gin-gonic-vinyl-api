@@ -14,7 +14,7 @@ func ConnectDatabase() {
 		panic("Failed to connect to database!")
 	}
 
-	db.AutoMigrate(&album{})
+	db.AutoMigrate(&Album{})
 
 	DB = db
 }

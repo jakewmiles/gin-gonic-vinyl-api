@@ -26,12 +26,14 @@ func GetAlbums(c *gin.Context) {
 // 	c.JSON(http.StatusNotFound, gin.H{"message": "album not found"})
 // }
 
-// func postAlbums(c *gin.Context) {
-// 	var newAlbum album
-// 	err := c.BindJSON(&newAlbum)
-// 	if err != nil {
-// 		return
-// 	}
-// 	albums = append(albums, newAlbum)
-// 	c.JSON(http.StatusCreated, newAlbum)
-// }
+func PostAlbum(c *gin.Context) {
+	var input models.CreateAlbumInput
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	album := models.Album{Title: input.Title, Artist: input.Artist, Price: input.Price}
+	models.DB.Create(&album)
+	c.JSON(http.StatusOK, gin.H{"data": album})
+}

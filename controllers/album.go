@@ -14,17 +14,16 @@ func GetAlbums(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": albums})
 }
 
-// func getAlbumByID(c *gin.Context) {
-// 	id := c.Param("id")
+func GetAlbumById(c *gin.Context) {
+	var album models.Album
+	err := models.DB.Where("id = ?", c.Param("id")).First(&album).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Album not found!"})
+		return
+	}
 
-// 	for _, a := range albums {
-// 		if a.ID == id {
-// 			c.JSON(http.StatusOK, a)
-// 			return
-// 		}
-// 	}
-// 	c.JSON(http.StatusNotFound, gin.H{"message": "album not found"})
-// }
+	c.JSON(http.StatusOK, gin.H{"data": album})
+}
 
 func PostAlbum(c *gin.Context) {
 	var input models.CreateAlbumInput

@@ -52,3 +52,18 @@ func PostAlbum(c *gin.Context) {
 	models.DB.Create(&album)
 	c.JSON(http.StatusOK, gin.H{"data": album})
 }
+
+func DeleteAlbumById(c *gin.Context) {
+	var album models.Album
+	getErr := models.DB.Where("id = ?", c.Param("id")).First(&album).Error
+	if getErr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": getErr.Error()})
+		return
+	}
+	deleteErr := models.DB.Delete(&models.Album{}, c.Param("id")).Error
+	if deleteErr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": deleteErr.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"deleted": album})
+}

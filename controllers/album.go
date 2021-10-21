@@ -9,7 +9,7 @@ import (
 
 func GetAlbums(c *gin.Context) {
 	var albums []models.Album
-	models.DB.Find(&albums)
+	models.DB.Order("id asc").Find(&albums)
 
 	c.JSON(http.StatusOK, gin.H{"data": albums})
 }
@@ -23,6 +23,22 @@ func GetAlbumById(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": album})
+}
+
+func UpdateAlbumById(c *gin.Context) {
+	var updated models.CreateAlbumInput
+	err := c.ShouldBindJSON(&updated)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	albumErr := models.DB.Where("id = ?", c.Param("id")).Updates(models.Album{Title: updated.Title, Artist: updated.Artist, Price: updated.Price}).Error
+	if albumErr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": updated})
+
 }
 
 func PostAlbum(c *gin.Context) {

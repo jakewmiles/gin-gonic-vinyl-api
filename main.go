@@ -7,13 +7,13 @@ import (
 )
 
 func main() {
-	router := gin.Default()
+	app := gin.Default()
 	models.ConnectDatabase()
 
-	router.GET("/albums", controllers.GetAlbums)
-	router.GET("/albums/:id", controllers.GetAlbumById)
-	router.POST("/albums", controllers.PostAlbum)
-	router.PUT("/albums/:id", controllers.UpdateAlbumById)
-	router.DELETE("/albums/:id", controllers.DeleteAlbumById)
-	router.Run("localhost:8080")
+	app.GET("/albums", controllers.GetAlbums)
+	app.GET("/albums/:id", controllers.GetAlbumById)
+	app.POST("/albums", controllers.PostAlbum)
+	app.PUT("/albums/:id", controllers.UpdateAlbumById)
+	app.DELETE("/albums/:id", controllers.DeleteAlbumById)
+	app.Run("localhost:8080")
 }
